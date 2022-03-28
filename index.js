@@ -4,6 +4,8 @@ const cors = require('cors');
 const app = express();
 const port = process.env.API_PORT;
 
+const productsRouter = require('./src/routers/products/index')
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
@@ -11,6 +13,8 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.status(200).send('API IS RUNNING');
 });
+
+app.use("/products", productsRouter)
 
 app.use((error, req, res, next) => {
   res.status(500).send({
@@ -24,4 +28,5 @@ app.listen(port, (err) => {
   if (err) return cosole.log({ err });
 
   console.log(`Api is running at port ${port}`);
+  console.log(port);
 });
