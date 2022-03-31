@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../../config/database');
 const auth = require('../../middleware/auth');
+const { verify } = require('../../services/token');
 
 const getAllUser = async (req, res, next) => {
   try {
@@ -19,6 +20,25 @@ const getAllUser = async (req, res, next) => {
   }
 };
 
+const getVerify = async (req, res, next) => {
+  try {
+    const verifiedToken = verify(req.query.token);
+
+    const connection = await pool.promise().getConnection();
+
+    const sqlUpdateVerify = 'UPDATE users SET is_verified = true WHERE id = ?';
+    const dataUpdateVerify = verifiedToken.id;
+
+    const result = await connection.query(sqlUpdateVerify, dataUpdateVerify);
+    connection.release();
+
+    res.status(200).send('<h1>Verification Success</h1>');
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
 router.get('/getAll', auth, getAllUser);
+router.get('/verify', auth, getVerify);
 
 module.exports = router;
