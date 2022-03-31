@@ -5,27 +5,20 @@ const auth = require('../../middleware/auth');
 const getAllUser = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
-    await connection.beginTransaction();
 
-    try {
-      const connection = await pool.promise().getConnection();
+    const sqlGetUsers = `SELECT * FROM users;`;
 
-      const sqlGetUsers = `SELECT * FROM users;`;
+    const result = await connection.query(sqlGetUsers);
+    connection.release();
 
-      const result = await connection.query(sqlGetUsers);
-      connection.release();
+    const user = result[0];
 
-      const user = result[0];
-
-      res.status(200).send({ user });
-    } catch (error) {
-      next(error);
-    }
+    res.status(200).send({ user });
   } catch (error) {
     next(error);
   }
 };
 
-router.get('/', auth, getAllUser);
+router.get('/getAll', auth, getAllUser);
 
 module.exports = router;

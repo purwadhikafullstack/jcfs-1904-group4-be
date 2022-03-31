@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 app.use('/users', userRouter);
 
 app.use((error, req, res, next) => {
+  console.log({ error });
   res.status(500).send({
     status: 'ERROR',
     message: error.message,

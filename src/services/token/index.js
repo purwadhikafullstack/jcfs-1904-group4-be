@@ -3,10 +3,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const key = process.env.JWT_KEY;
 
-const sign = (data) => {
-  const result = jwt.sign(data, key);
-  return result;
-};
+const sign = (data) => jwt.sign(data, key);
 
 const verify = (data) => jwt.verify(data, key);
 
