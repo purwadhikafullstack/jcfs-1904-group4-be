@@ -10,7 +10,7 @@ const postLoginUser = async (req, res, next) => {
     const connection = await pool.promise().getConnection();
     const { username, password } = req.body;
 
-    const sqlLoginUser = `SELECT user_id, username, full_name, email, role, is_verified, warehouse_id FROM users WHERE username = ?;`;
+    const sqlLoginUser = `SELECT user_id, username, full_name, email, password, role, is_verified, warehouse_id FROM users WHERE username = ?;`;
     const sqlDataUser = username;
 
     const result = await connection.query(sqlLoginUser, sqlDataUser);
@@ -20,9 +20,9 @@ const postLoginUser = async (req, res, next) => {
 
     if (!user) return res.status(404).send({ message: 'User not found' });
 
-    // const compareResult = bcrypt.compareSync(password, user.password);
+    const compareResult = bcrypt.compareSync(password, user[0].password);
 
-    // if (!compareResult) return res.status(401).send({ message: 'Wrong password' });
+    if (!compareResult) return res.status(401).send({ message: 'Wrong password' });
 
     if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
 
@@ -50,21 +50,20 @@ const postRegisterUser = async (req, res, next) => {
     connection.release();
 
     const user = result[0];
-    const token = sign({ id: result.insertId });
+    const token = sign({ id: user.insertId });
 
     sendEmail({
-      reciient: sqlDataUser.email,
+      recipient: sqlDataUser.email,
       subject: 'Verification',
       templateName: 'verification.html',
       data: {
         username: sqlDataUser.username,
-        url: `http://localhost:${process.env.PORT}/users/verify?token=${token}`,
+        url: `http://localhost:${process.env.API_PORT}/users/verify?token=${token}`,
       },
     });
 
     res.status(201).send({ message: `Data dengan username : ${req.body.username} berhasil ditambahkan` });
   } catch (error) {
-    // return res.status(500).send({ code: error.code, message: error.sqlMessage });
     next(error);
   }
 };

@@ -26,7 +26,8 @@ const getVerify = async (req, res, next) => {
 
     const connection = await pool.promise().getConnection();
 
-    const sqlUpdateVerify = 'UPDATE users SET is_verified = true WHERE id = ?';
+    const sqlUpdateVerify = `UPDATE users SET is_verified = true WHERE user_id = ?`;
+
     const dataUpdateVerify = verifiedToken.id;
 
     const result = await connection.query(sqlUpdateVerify, dataUpdateVerify);
@@ -39,6 +40,6 @@ const getVerify = async (req, res, next) => {
 };
 
 router.get('/getAll', auth, getAllUser);
-router.get('/verify', auth, getVerify);
+router.get('/verify', getVerify);
 
 module.exports = router;
