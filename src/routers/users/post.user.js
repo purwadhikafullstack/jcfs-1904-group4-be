@@ -24,7 +24,7 @@ const postLoginUser = async (req, res, next) => {
 
     if (!compareResult) return res.status(401).send({ message: 'Wrong password' });
 
-    if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
+    // if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
 
     const token = sign({ id: user[0].user_id });
     // user:[{id: 1, username: user1}]
@@ -38,7 +38,7 @@ const postRegisterUser = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
-    const sqlRegisteruser = `INSERT INTO users SET ?`;
+    const sqlRegisterUser = `INSERT INTO users SET ?`;
     const sqlDataUser = req.body;
 
     const isEmail = validator.isEmail(sqlDataUser.email);
@@ -46,10 +46,10 @@ const postRegisterUser = async (req, res, next) => {
 
     sqlDataUser.password = bcrypt.hashSync(sqlDataUser.password);
 
-    const result = await connection.query(sqlRegisteruser, sqlDataUser);
+    const resultRegister = await connection.query(sqlRegisterUser, sqlDataUser);
     connection.release();
 
-    const user = result[0];
+    const user = resultRegister[0];
     const token = sign({ id: user.insertId });
 
     sendEmail({
@@ -62,7 +62,23 @@ const postRegisterUser = async (req, res, next) => {
       },
     });
 
-    res.status(201).send({ message: `Data dengan username : ${req.body.username} berhasil ditambahkan` });
+    const sqlRegisterGetUser = `SELECT username, role, is_verified FROM users WHERE username = ?`;
+    const sqlDataGetUser = req.body.username;
+
+    const resultGetRegister = await connection.query(sqlRegisterGetUser, sqlDataGetUser);
+    connection.release();
+
+    const getUser = resultGetRegister[0];
+
+    res.status(201).send({
+      user: {
+        user_id: user.insertId,
+        username: getUser[0].username,
+        role: getUser[0].role,
+        is_verified: getUser[0].is_verified,
+      },
+      message: `Data dengan username : ${req.body.username} berhasil ditambahkan`,
+    });
   } catch (error) {
     next(error);
   }
