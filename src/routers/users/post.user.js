@@ -78,6 +78,7 @@ const postRegisterUser = async (req, res, next) => {
         is_verified: getUser[0].is_verified,
       },
       message: `Data dengan username : ${req.body.username} berhasil ditambahkan`,
+      token,
     });
   } catch (error) {
     next(error);
