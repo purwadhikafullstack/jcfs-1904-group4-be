@@ -7,7 +7,7 @@ const courier = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     type: 'OAuth2',
-    user: 'mujaddid.s.i@gmail.com',
+    user: 'orca97@gmail.com',
     clientId: process.env.G_CLIENT_ID,
     clientSecret: process.env.G_CLIENT_SECRET,
     refreshToken: process.env.G_REFRESH_TOKEN,

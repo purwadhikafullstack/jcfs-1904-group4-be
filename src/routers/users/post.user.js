@@ -24,8 +24,6 @@ const postLoginUser = async (req, res, next) => {
 
     if (!compareResult) return res.status(401).send({ message: 'Wrong password' });
 
-    // if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
-
     const token = sign({ id: user[0].user_id });
     // user:[{id: 1, username: user1}]
     res.status(200).send({ user: user[0], token });
@@ -85,7 +83,64 @@ const postRegisterUser = async (req, res, next) => {
   }
 };
 
+const postForgotPassword = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlForgotPassword = `SELECT email FROM users WHERE email = ?;`;
+    const sqlDataUser = req.body;
+
+    const result = await connection.query(sqlForgotPassword, sqlDataUser);
+    connection.release();
+
+    const user = result[0];
+    const token = sign({ id: user.insertId });
+
+    sendEmail({
+      recipient: sqlDataUser.email,
+      subject: 'Forgot Password',
+      templateName: 'forgotPassword.html',
+      data: {
+        email: sqlDataUser.email,
+        url: `http://localhost:${process.env.API_PORT}/reset-password/${token}`,
+      },
+    });
+
+    res.status(200).send({ user: user[0] });
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+const postResetPassword = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlResetPassword = `INSERT INTO users SET ?`;
+    const sqlDataUser = req.body;
+
+    sqlDataUser.password = bcrypt.hashSync(sqlDataUser.password);
+
+    const resultResetPassword = await connection.query(sqlForgotPassword, sqlDataUser);
+    connection.release();
+
+    const sqlGetResetPassword`SELECT user_id, username, full_name, email, role, is_verified, warehouse_id FROM users`
+
+    const resultGetResetPassword = await connection.query(resultGetResetPassword);
+    connection.release();
+
+    const user = resultGetResetPassword[0];
+    const token = sign({ id: user[0].user_id });
+
+    res.status(200).send({ user: user[0], token });
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
 router.post('/login', postLoginUser);
 router.post('/register', postRegisterUser);
+router.post('/forgot-password', postForgotPassword);
+router.post('/reset-password', postResetPassword);
 
 module.exports = router;
