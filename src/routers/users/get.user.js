@@ -22,9 +22,9 @@ const getAllUser = async (req, res, next) => {
 
 const getVerify = async (req, res, next) => {
   try {
-    const verifiedToken = verify(req.query.token);
-
     const connection = await pool.promise().getConnection();
+
+    const verifiedToken = verify(req.query.token);
 
     const sqlUpdateVerify = `UPDATE users SET is_verified = true WHERE user_id = ?`;
 

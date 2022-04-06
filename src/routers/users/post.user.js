@@ -2,7 +2,7 @@ const router = require('express').Router();
 const pool = require('../../config/database');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { sign } = require('../../services/token');
+const { sign, verify } = require('../../services/token');
 const sendEmail = require('../../services/email');
 
 const postLoginUser = async (req, res, next) => {
@@ -87,50 +87,24 @@ const postForgotPassword = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
-    const sqlForgotPassword = `SELECT email FROM users WHERE email = ?;`;
-    const sqlDataUser = req.body;
+    const sqlForgotPassword = `SELECT user_id FROM users WHERE email = ?;`;
+    const sqlDataUser = req.body.email;
 
     const result = await connection.query(sqlForgotPassword, sqlDataUser);
     connection.release();
 
     const user = result[0];
-    const token = sign({ id: user.insertId });
+    const token = sign({ id: user[0].user_id });
 
     sendEmail({
-      recipient: sqlDataUser.email,
+      recipient: sqlDataUser,
       subject: 'Forgot Password',
       templateName: 'forgotPassword.html',
       data: {
-        email: sqlDataUser.email,
-        url: `http://localhost:${process.env.API_PORT}/reset-password/${token}`,
+        email: sqlDataUser,
+        url: `http://localhost:${process.env.API_PORT_REACT}/reset-password/${token}`,
       },
     });
-
-    res.status(200).send({ user: user[0] });
-  } catch (error) {
-    console.log({ error });
-  }
-};
-
-const postResetPassword = async (req, res, next) => {
-  try {
-    const connection = await pool.promise().getConnection();
-
-    const sqlResetPassword = `INSERT INTO users SET ?`;
-    const sqlDataUser = req.body;
-
-    sqlDataUser.password = bcrypt.hashSync(sqlDataUser.password);
-
-    const resultResetPassword = await connection.query(sqlForgotPassword, sqlDataUser);
-    connection.release();
-
-    const sqlGetResetPassword`SELECT user_id, username, full_name, email, role, is_verified, warehouse_id FROM users`
-
-    const resultGetResetPassword = await connection.query(resultGetResetPassword);
-    connection.release();
-
-    const user = resultGetResetPassword[0];
-    const token = sign({ id: user[0].user_id });
 
     res.status(200).send({ user: user[0], token });
   } catch (error) {
@@ -141,6 +115,5 @@ const postResetPassword = async (req, res, next) => {
 router.post('/login', postLoginUser);
 router.post('/register', postRegisterUser);
 router.post('/forgot-password', postForgotPassword);
-router.post('/reset-password', postResetPassword);
 
 module.exports = router;
