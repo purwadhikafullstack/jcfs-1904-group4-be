@@ -16,9 +16,9 @@ jobs:
       - name: Deploy Attendance API with github action
         uses: appleboy/ssh-action@master
         with:
-          host: ${{screts.SSH_HOST}}
-          username: ${{screts.SSH_USERNAME}}
-          key: ${{screts.SSH_KEY}}
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
           port: 22
           script: |
             cd ~/app/jcfs-1904-group4-be
