@@ -16,7 +16,7 @@ jobs:
       - name: Deploy Attendance API with github action
         uses: appleboy/ssh-action@master
         with:
-          host: 172.105.115.129}
+          host: 172.105.115.129
           username: root
           key: b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABD/DM+u3q
 Fm5QbIor0Nha4EAAAAEAAAAAEAAAIXAAAAB3NzaC1yc2EAAAADAQABAAACAQDbZd/nhUEu
