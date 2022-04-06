@@ -1,7 +1,8 @@
 const router = require("express").Router();
 
-const getProductsRouter = require("./get.products");
+const { getAllProductsRouter, getProductsByIdRouter } = require("./get.products");
 
-router.use(getProductsRouter);
+router.use(getAllProductsRouter);
+router.use(getProductsByIdRouter);
 
 module.exports = router;

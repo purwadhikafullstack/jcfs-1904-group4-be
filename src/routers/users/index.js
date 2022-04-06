@@ -1,7 +1,7 @@
-const router = require("express").Router();
+// const router = require("express").Router();
 
-const postUsersRouter = require("./post.users");
+// const postUsersRouter = require("./post.users");
 
-router.use(postUsersRouter);
+// router.use(postUsersRouter);
 
-module.exports = router;
+// module.exports = router;
