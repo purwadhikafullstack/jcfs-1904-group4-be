@@ -1,5 +1,5 @@
 # Konfigurasi Continuos Deployment
-name: CD Attendance API
+name: 4_warehouse
 
 on:
   push:
@@ -13,62 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy Attendance API with github action
+      - name: Deploy 4_wareouse API with github action
         uses: appleboy/ssh-action@master
         with:
-          host: 172.105.115.129
-          username: root
-          key: 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
-5fyy4cVbeQqm4Iw9/t9SN3MSU=
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          password: ${{secrets.SSH_PASSWORD}}
           port: 22
           script: |
-            cd ~/app/jcfs-1904-group4-be
+            cd ~/app/test-action
             git pull origin master
             npm install
-            pm2 restart 4_warehouse
+            pm2 restart test-action
