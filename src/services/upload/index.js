@@ -11,7 +11,7 @@ const storage = multer.diskStorage ({
 
     filename: function (req, file, cb) {
         req.body
-        cb(null, 'success.png');
+        cb(null, `${req.users.username}-photo.jpg`);
     },
   });
 
@@ -21,8 +21,13 @@ const storage = multer.diskStorage ({
         fileSize: 20000000 // 20 MB (1 MB = 1.000.000 B)
     },
     fileFilter (req, file, cb) {
-        console.log({ file })
-        cb(undefined, true)
+        const allowedExtension = ['.png', '.jpg', '.jpeg'];
+        const extname = path.extname(file.originalname);
+
+        if (!allowedExtension.includes(extname))
+          return cb(new Error("Please upload under jpg, jpeg or png format"))
+
+        cb (null, true)
     }
   });
 
