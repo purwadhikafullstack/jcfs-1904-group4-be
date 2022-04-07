@@ -7,3 +7,4 @@ router.use(postLoginUserRouter);
 router.use(getAllUserRouter);
 
 module.exports = router;
+
