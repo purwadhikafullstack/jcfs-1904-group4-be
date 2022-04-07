@@ -1,8 +1,9 @@
 const router = require('express').Router();
+const upload = require('../../services/upload/')
 const pool = require('../../config/database');
 const { sign } = require('../../services/token');
 
-const postLoginUser = async (req, res, next) => {
+const postLoginUserRouter = router.post('/login', async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
     const { username, password } = req.body;
@@ -29,11 +30,19 @@ const postLoginUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+});
 
-const postRegisterUser = async (req, res, next) => {};
+// const postRegisterUser = router.post('/register', async (req, res, next) => {});
 
-router.post('/login', postLoginUser);
-router.post('/register', postRegisterUser);
+// Upload Photo
+const multerUpload = upload.single('photo');
+const postUserPhotoRouter = router.post(
+  '/upload',
+  multerUpload, 
+  async (req, res, next) => {
+  // Simpan nama photo (username-photo.png)
+  res.send('Periksa console log')
+});
 
-module.exports = router;
+
+module.exports = { postUserPhotoRouter, postLoginUserRouter};
