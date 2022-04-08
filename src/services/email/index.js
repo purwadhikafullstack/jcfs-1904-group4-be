@@ -8,9 +8,9 @@ const courier = nodemailer.createTransport({
   auth: {
     type: 'OAuth2',
     user: 'orca97@gmail.com',
-    clientId: process.env.G_CLIENT_ID,
-    clientSecret: process.env.G_CLIENT_SECRET,
-    refreshToken: process.env.G_REFRESH_TOKEN,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
   },
 });
 

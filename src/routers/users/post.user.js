@@ -1,3 +1,4 @@
+require('dotenv').config();
 const router = require('express').Router();
 const pool = require('../../config/database');
 const validator = require('validator');
@@ -56,7 +57,7 @@ const postRegisterUser = async (req, res, next) => {
       templateName: 'verification.html',
       data: {
         username: sqlDataUser.username,
-        url: `http://localhost:${process.env.API_PORT}/users/verify?token=${token}`,
+        url: `${process.env.API_URL}/users/verify?token=${token}`,
       },
     });
 
@@ -102,7 +103,7 @@ const postForgotPassword = async (req, res, next) => {
       templateName: 'forgotPassword.html',
       data: {
         email: sqlDataUser,
-        url: `http://localhost:${process.env.API_PORT_REACT}/reset-password/${token}`,
+        url: `${process.env.CLIENT_URL}/reset-password/${token}`,
       },
     });
 
