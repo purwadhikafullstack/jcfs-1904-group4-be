@@ -17,9 +17,9 @@ app.get('/', (req, res) => {
   res.status(200).send('API IS RUNNING');
 });
 
-app.use("/products", productsRouter)
-app.use("/categories", categoriesRouter)
-app.use("/address", addressRouter)
+app.use('/products', productsRouter);
+app.use('/categories', categoriesRouter);
+app.use('/address', addressRouter);
 app.use('/users', userRouter);
 
 app.use((error, req, res, next) => {
