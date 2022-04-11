@@ -10,6 +10,7 @@ const putResetPasswordRouter = require('./put.user');
 
 const getAllUserRouter = require('./get.user');
 const getVerifyUserRouter = require('./get.user');
+const getUserPictureRouter = require('./get.user')
 
 router.use(postUserPhotoRouter);
 router.use(postLoginUserRouter);
@@ -19,6 +20,7 @@ router.use(postForgotPasswordRouter);
 router.use(putUserDataRouter);
 router.use(putResetPasswordRouter);
 
+router.use(getUserPictureRouter)
 router.use(getAllUserRouter);
 router.use(getVerifyUserRouter);
 
