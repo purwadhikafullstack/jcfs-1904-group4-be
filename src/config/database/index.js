@@ -1,6 +1,6 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const mysql = require("mysql2");
+const mysql = require('mysql2');
 
 const { DB_HOST, DB_USER, DB_NAME, DB_PASS } = process.env;
 
@@ -16,7 +16,7 @@ const mysql2 = mysql.createPool({
 mysql2.getConnection((err, conn) => {
   if (err) {
     conn.release();
-    console.error("error connecting: " + err.stack);
+    console.error('error connecting: ' + err.stack);
     return;
   }
   console.log(`Successfully connected to the database (id ${conn.threadId})`);
