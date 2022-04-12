@@ -51,7 +51,7 @@ const postUserPhoto = async (req, res, next) => {
       const result = await connection.query(sqlPostUserPhoto, dataPostUserPhoto);
       connection.release();
 
-      res.status(200).send({ result })
+      res.status(200).send("Update was successful");
   } catch (error) {
     next (error)
   }
