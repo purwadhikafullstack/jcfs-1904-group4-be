@@ -37,4 +37,22 @@ const getDefaultAddressRouter = router.get('/default/:user_id', async (req, res,
   }
 });
 
-  module.exports = { getUserAddressRouter, getDefaultAddressRouter };
+const getChosenAddressRouter = router.get('/chosen/:address_id', async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetChosenAddress = `SELECT * FROM address_users WHERE address_id = ${req.params.address_id}`;
+
+    const result = await connection.query(sqlGetChosenAddress);
+    connection.release();
+
+    console.log(result[0])
+    const address = result[0]
+    
+    res.status(200).send({ address })
+  } catch (error) {
+    next(error);
+  }
+})
+
+  module.exports = { getUserAddressRouter, getDefaultAddressRouter, getChosenAddressRouter };
