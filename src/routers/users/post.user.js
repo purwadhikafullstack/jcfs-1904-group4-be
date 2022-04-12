@@ -43,7 +43,6 @@ const multerUpload = upload.single('photo');
 const postUserPhoto = async (req, res, next) => {
   try {
       const connection = await pool.promise().getConnection();
-      console.log({file: req.file})
 
       const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
       const dataPostUserPhoto = [req.file.filename, req.params.user_id]

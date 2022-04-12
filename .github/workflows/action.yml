@@ -24,4 +24,4 @@ jobs:
             cd ~/app/jcfs-1904-group4-be
             git pull origin master
             npm install
-            pm2 restart api-warehouse-4
+            pm2 restart api-4-warehouse
