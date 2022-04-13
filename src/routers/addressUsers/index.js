@@ -1,8 +1,10 @@
 const router = require("express").Router();
 
-const { getUserAddressRouter, getDefaultAddressRouter, getChosenAddressRouter } = require('./get.address');
-const { postUserAddressRouter } = require('./post.address')
-const { putUserAddressRouter } = require('./put.address')
+const getUserAddressRouter = require('./get.address');
+const getDefaultAddressRouter = require('./get.address'); 
+const getChosenAddressRouter = require('./get.address');
+const postUserAddressRouter = require('./post.address')
+const putUserAddressRouter = require('./put.address')
 
 router.use(getUserAddressRouter);
 router.use(getChosenAddressRouter);

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
-const getUserAddressRouter = router.get('/:user_id', async (req, res, next) => {
+const getUserAddress = async (req, res, next) => {
     try {
       const connection = await pool.promise().getConnection();
   
@@ -17,9 +17,9 @@ const getUserAddressRouter = router.get('/:user_id', async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  });
+  };
 
-const getDefaultAddressRouter = router.get('/default/:user_id', async (req, res, next) => {
+const getDefaultAddress = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
@@ -35,9 +35,9 @@ const getDefaultAddressRouter = router.get('/default/:user_id', async (req, res,
   } catch (error) {
     next(error);
   }
-});
+};
 
-const getChosenAddressRouter = router.get('/chosen/:address_id', async (req, res, next) => {
+const getChosenAddress = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
@@ -53,6 +53,10 @@ const getChosenAddressRouter = router.get('/chosen/:address_id', async (req, res
   } catch (error) {
     next(error);
   }
-})
+};
 
-  module.exports = { getUserAddressRouter, getDefaultAddressRouter, getChosenAddressRouter };
+router.get('/:user_id', getUserAddress);
+router.get('/default/:user_id', getDefaultAddress);
+router.get('/chosen/:address_id', getChosenAddress);
+
+module.exports = router;

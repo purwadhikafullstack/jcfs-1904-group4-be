@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
-const postUserAddressRouter = router.post("/new", async (req, res, next) => {
+const postUserAddress = async (req, res, next) => {
         try {
             const connection = await pool.promise().getConnection();
 
@@ -15,6 +15,8 @@ const postUserAddressRouter = router.post("/new", async (req, res, next) => {
         } catch (error) {
           next (error)
         }
-});
+};
 
-module.exports = { postUserAddressRouter }
+router.post("/new", postUserAddress)
+
+module.exports = router;

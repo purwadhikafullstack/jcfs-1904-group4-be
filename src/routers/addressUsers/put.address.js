@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
-const putUserAddressRouter = router.put("/put/:address_id", async (req, res, next) => {
+const putUserAddress = async (req, res, next) => {
         try {
             const connection = await pool.promise().getConnection();
 
@@ -15,6 +15,8 @@ const putUserAddressRouter = router.put("/put/:address_id", async (req, res, nex
         } catch (error) {
           next (error)
         }
-});
+};
 
-module.exports = { putUserAddressRouter }
+router.put("/put/:address_id", putUserAddress)
+
+module.exports = router;
