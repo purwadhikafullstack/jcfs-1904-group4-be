@@ -6,10 +6,10 @@ const cors = require("cors");
 const app = express();
 const port = process.env.API_PORT;
 
-const productsRouter = require("./src/routers/products/index");
-const categoriesRouter = require("./src/routers/categories/index");
-const addressRouter = require("./src/routers/addressUsers/index");
-const userRouter = require("./src/routers/users/index");
+const productsRouter = require('./src/routers/products/index')
+const categoriesRouter = require('./src/routers/categories/index')
+const addressRouter = require('./src/routers/addressUsers/index')
+const userRouter = require('./src/routers/users/index');
 
 app.use(cors());
 app.use(express.json());

@@ -4,6 +4,7 @@ const upload = require('../../services/upload/')
 const pool = require('../../config/database');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
 const { sign, verify } = require('../../services/token');
 const sendEmail = require('../../services/email');
 
@@ -41,8 +42,19 @@ const postLoginUser = async (req, res, next) => {
 // Upload Photo
 const multerUpload = upload.single('photo');
 const postUserPhoto = async (req, res, next) => {
-  // Simpan nama photo (username-photo.png)
-  res.send('Periksa console log')
+  try {
+      const connection = await pool.promise().getConnection();
+
+      const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
+      const dataPostUserPhoto = [req.file.filename, req.params.user_id]
+
+      const result = await connection.query(sqlPostUserPhoto, dataPostUserPhoto);
+      connection.release();
+
+      res.status(200).send("Update was successful");
+  } catch (error) {
+    next (error)
+  }
 };
 
 const postRegisterUser = async (req, res, next) => {
@@ -125,7 +137,7 @@ const postForgotPassword = async (req, res, next) => {
   }
 };
 
-router.post('/upload', multerUpload, postUserPhoto);
+router.post('/upload/:user_id', multerUpload, auth, postUserPhoto);
 router.post('/login', postLoginUser);
 router.post('/register', postRegisterUser);
 router.post('/forgot-password', postForgotPassword);
