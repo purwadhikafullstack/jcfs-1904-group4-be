@@ -136,7 +136,7 @@ const postForgotPassword = async (req, res, next) => {
   }
 };
 
-router.post('/upload/:user_id', multerUpload, postUserPhoto);
+router.post('/upload/:user_id', multerUpload, auth, postUserPhoto);
 router.post('/login', postLoginUser);
 router.post('/register', postRegisterUser);
 router.post('/forgot-password', postForgotPassword);

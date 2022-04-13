@@ -54,7 +54,7 @@ const getUserPicture = async (req, res, next) => {
   }
 };
 
-router.get('/picture/:user_id', getUserPicture)
+router.get('/picture/:user_id', auth, getUserPicture)
 router.get('/getAll', auth, getAllUser);
 router.get('/verify', getVerify);
 
