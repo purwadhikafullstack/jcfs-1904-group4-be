@@ -4,6 +4,7 @@ const upload = require('../../services/upload/')
 const pool = require('../../config/database');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
 const { sign, verify } = require('../../services/token');
 const sendEmail = require('../../services/email');
 
