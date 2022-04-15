@@ -1,22 +1,22 @@
-// const router = require("express").Router();
-// const pool = require("../../config/database");
+const router = require("express").Router();
+const pool = require("../../config/database");
 
-// const postNewCart = async (req, res, next) => {
-//     try {
-//         const connection = await pool.promise().getConnection();
+const postNewCart = async (req, res, next) => {
+    try {
+        const connection = await pool.promise().getConnection();
 
-//             const sqlPostUserAddress = "INSERT INTO address_users SET ?;";
-//             const dataPostUserAddress = [ req.body ]
+            const sqlPostUserAddress = `INSERT INTO carts SET ?;`;
+            const dataPostUserAddress = [ req.body ]
 
-//             const result = await connection.query(sqlPostUserAddress, dataPostUserAddress)
-//             connection.release();
+            connection.query(sqlPostUserAddress, dataPostUserAddress)
+            connection.release();
 
-//             res.status(200).send("Address successfully added")
-//         } catch (error) {
-//           next (error)
-//     }
-// };
+            res.status(200).send("Successfullt added to cart")
+        } catch (error) {
+          next (error)
+    }
+};
 
-// router.post('')
+router.post('/add', postNewCart)
 
-// module.exports = router;
+module.exports = router;
