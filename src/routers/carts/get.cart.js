@@ -30,7 +30,6 @@ const getCartById = async (req, res, next) => {
 
             const cart = result[0]
             const quantity = cart[0]
-            console.log(quantity)
 
             res.status(200).send({ quantity })
         } catch (error) {
