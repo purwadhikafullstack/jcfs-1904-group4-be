@@ -5,7 +5,10 @@ const getCart = async (req, res, next) => {
         try {
             const connection = await pool.promise().getConnection();
     
-                const sqlGetUserCart = `SELECT product_id, product_name, product_price, quantity FROM carts WHERE user_id = ${req.params.user_id}`;
+                const sqlGetUserCart = `SELECT c.cart_id, p.product_id, quantity, p.product_name, p.product_image_name, price FROM products p
+                                        JOIN cart_details cd ON p.product_id = cd.product_id
+                                        JOIN carts c ON cd.cart_id = c.cart_id
+                                        WHERE user_id = ${req.params.user_id};`;
     
                 const result = await connection.query(sqlGetUserCart)
                 connection.release();

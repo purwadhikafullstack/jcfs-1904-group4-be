@@ -5,8 +5,8 @@ const putCartQuantity = async (req, res, next) => {
         try {
             const connection = await pool.promise().getConnection();
     
-                const sqlPutCartQuantity = `UPDATE carts SET quantity = ? WHERE user_id = ? AND product_id = ?`;
-                const dataPutCartQuantity = [ req.body.quantity, req.params.user_id, req.body.product_id ]
+                const sqlPutCartQuantity = `UPDATE cart_details SET quantity = ? WHERE cart_id = ? AND product_id = ?`;
+                const dataPutCartQuantity = [ req.body.quantity, req.params.cart_id, req.body.product_id ]
 
                 connection.query(sqlPutCartQuantity, dataPutCartQuantity)
                 connection.release();
@@ -17,6 +17,6 @@ const putCartQuantity = async (req, res, next) => {
         }
     };
     
-router.put('/quantity/:user_id', putCartQuantity)
+router.put('/quantity/:cart_id', putCartQuantity)
     
 module.exports = router;
