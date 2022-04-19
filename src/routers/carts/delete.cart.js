@@ -5,7 +5,7 @@ const deleteFromCart = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
 
-            const sqlDeleteFromCart = `DELETE FROM carts WHERE user_id = ${req.params.user_id} AND product_id = ${req.params.product_id}`;
+            const sqlDeleteFromCart = `DELETE FROM cart_details WHERE cart_id = ${req.params.cart_id} AND product_id = ${req.params.product_id}`;
 
             connection.query(sqlDeleteFromCart)
             connection.release();
@@ -16,6 +16,6 @@ const deleteFromCart = async (req, res, next) => {
     }
 };
 
-router.delete('/delete/:user_id/:product_id', deleteFromCart)
+router.delete('/delete/:cart_id/:product_id', deleteFromCart)
 
 module.exports = router;
