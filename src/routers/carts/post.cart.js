@@ -5,7 +5,7 @@ const postNewCart = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
 
-            const sqlPostUserAddress = `INSERT INTO carts SET ?;`;
+            const sqlPostUserAddress = `INSERT INTO cart_details SET ?;`;
             const dataPostUserAddress = [ req.body ]
 
             connection.query(sqlPostUserAddress, dataPostUserAddress)
