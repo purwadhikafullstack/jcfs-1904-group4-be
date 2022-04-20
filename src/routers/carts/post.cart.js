@@ -11,7 +11,7 @@ const postNewCart = async (req, res, next) => {
             connection.query(sqlPostUserAddress, dataPostUserAddress)
             connection.release();
 
-            res.status(200).send("Successfullt added to cart")
+            res.status(200).send("Successfully added to cart")
         } catch (error) {
           next (error)
     }
