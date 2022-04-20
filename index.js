@@ -8,6 +8,7 @@ const productsRouter = require('./src/routers/products/index');
 const categoriesRouter = require('./src/routers/categories/index');
 const addressRouter = require('./src/routers/addressUsers/index');
 const userRouter = require('./src/routers/users/index');
+const salesReportRouter = require('./src/routers/salesReport/index');
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
 app.use('/address', addressRouter);
 app.use('/users', userRouter);
+app.use('/sales-report', salesReportRouter);
 
 app.use((error, req, res, next) => {
   console.log({ error });

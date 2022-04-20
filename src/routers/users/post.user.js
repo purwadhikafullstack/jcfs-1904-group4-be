@@ -28,7 +28,7 @@ const postLoginUser = async (req, res, next) => {
     if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
 
     const token = sign({ id: user[0].user_id });
-    
+
     res.status(200).send({ user: user[0], token });
   } catch (error) {
     next(error);
