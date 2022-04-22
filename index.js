@@ -11,7 +11,6 @@ const categoriesRouter = require('./src/routers/categories/index')
 const warehouseRouter = require('./src/routers/warehouses/index')
 const addressRouter = require('./src/routers/addressUsers/index')
 const productsRouter = require('./src/routers/products/index')
-const ordersRouter = require('./src/routers/orders/index')
 const userRouter = require('./src/routers/users/index');
 const cartRouter = require('./src/routers/carts/index')
 
@@ -28,7 +27,6 @@ app.use("/categories", categoriesRouter);
 app.use("/warehouses", warehouseRouter);
 app.use("/products", productsRouter);
 app.use("/address", addressRouter);
-app.use("/orders", ordersRouter);
 app.use("/users", userRouter);
 app.use("/cart", cartRouter);
 
