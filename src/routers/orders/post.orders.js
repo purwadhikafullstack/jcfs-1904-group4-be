@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
+const generateString = require("../../services/helpers");
 
 const postNewOrders = async (req, res, next) => {
     try {
@@ -24,20 +25,15 @@ const postNewOrderDetails = async (req, res, next) => {
         const connection = await pool.promise().getConnection();
         const { order_id, carts } = req.body
 
-        function insert(carts) {
-            for (let i = 0; i < carts.length; i++) {
-                carts[i]
-            }
-        };
-            const sqlPostNewDetails = `INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (
-                                       ${order_id}, ?, ?, ?);`;
+        const sqlPostNewDetails = `INSERT INTO order_details (order_id, product_id, quantity, price) 
+                                   VALUES ${generateString(order_id, carts)};`;
             
+        connection.query(sqlPostNewDetails)
+        connection.release();
 
-            const dataPostNewDetails = [req.body]
-            connection.query(sqlPostNewDetails, dataPostNewDetails)
-            connection.release();
+        console.log(sqlPostNewDetails)
 
-            res.status(200).send("Successfully added to orders")
+        res.status(200).send("Successfully added to orders")
         } catch (error) {
           next (error)
     }
