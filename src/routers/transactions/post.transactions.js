@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
+const uploadTransaction = require('../../services/upload/transactions')
 const generateString = require("../../services/helpers");
 
 const postTransaction = async (req, res, next) => {
@@ -39,24 +40,26 @@ const postTransactionDetails = async (req, res, next) => {
     }
 };
 
-const postProof = async (req, res, next) => {
+// Upload Photo
+const multerUpload = uploadTransaction.single('photo');
+const postTransactionPhoto = async (req, res, next) => {
   try {
-        const connection = await pool.promise().getConnection();
+      const connection = await pool.promise().getConnection();
 
-        const sqlPostProof = "INSERT INTO transactions SET ?;";
-        const dataPostProof = [ req.body ]
+      const sqlPostUserPhoto = `UPDATE transactions SET proof_image = ? WHERE user_id = ?;`;
+      const dataPostUserPhoto = [req.file.filename, req.params.user_id]
 
-        const result = await connection.query(sqlPostProof, dataPostProof)
-        connection.release();
+      connection.query(sqlPostUserPhoto, dataPostUserPhoto);
+      connection.release();
 
-        res.status(200).send({ result })
-    } catch (error) {
-      next (error)
-    }
+      res.status(200).send("Proof successfully uploaded");
+  } catch (error) {
+    next (error)
+  }
 };
 
 router.post("/new", postTransaction)
 router.post("/details", postTransactionDetails)
-router.post("/proof", postProof)
+router.post("/photo/:user_id/:transaction_id", postTransactionPhoto)
 
 module.exports = router;
