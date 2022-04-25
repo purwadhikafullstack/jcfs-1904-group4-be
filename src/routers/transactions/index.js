@@ -7,11 +7,15 @@ const postProofRouter = require('./post.transactions')
 
 const getAllTransactionsRouter = require('./get.transactions')
 
+const putStatusTransactionsRouter = require('./put.transactions')
+
 router.use(postTransactionDetailsRouter);
 router.use(postTransactionPhotoRouter);
 router.use(postTransactionRouter);
 router.use(postProofRouter);
 
 router.use(getAllTransactionsRouter);
+
+router.use(putStatusTransactionsRouter);
 
 module.exports = router;
