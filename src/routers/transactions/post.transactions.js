@@ -60,6 +60,6 @@ const postTransactionPhoto = async (req, res, next) => {
 
 router.post("/new", postTransaction)
 router.post("/details", postTransactionDetails)
-router.post("/photo/:user_id/:transaction_id", postTransactionPhoto)
+router.post("/photo/:user_id/:transaction_id", multerUpload, postTransactionPhoto)
 
 module.exports = router;
