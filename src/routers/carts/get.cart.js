@@ -21,21 +21,22 @@ const getCart = async (req, res, next) => {
         }
     };
 
-const getCartById = async (req, res, next) => {
+const getCartByProductId = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
 
             const sqlGetUserCartById = `SELECT quantity, c.cart_id FROM cart_details cd
                                         JOIN carts c ON cd.cart_id = c.cart_id
-                                        WHERE user_id = ${req.params.user_id} AND product_id = ${req.params.product_id}`;
+                                        WHERE user_id = ${req.params.user_id} 
+                                        AND product_id = ${req.params.product_id}`;
 
             const result = await connection.query(sqlGetUserCartById)
             connection.release();
 
-            const cart = result[0]
-            const quantity = cart[0]
+            const data = result[0]
+            const cart = data[0]
 
-            res.status(200).send({ quantity })
+            res.status(200).send({ cart })
         } catch (error) {
           next (error)
     }
@@ -61,6 +62,6 @@ const getCartId = async (req, res, next) => {
     
 router.get('/:user_id', getCart)
 router.get('/id/:user_id', getCartId)
-router.get('/:user_id/:product_id', getCartById)
+router.get('/:user_id/:product_id', getCartByProductId)
     
 module.exports = router;
