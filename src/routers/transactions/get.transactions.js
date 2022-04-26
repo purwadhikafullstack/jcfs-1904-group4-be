@@ -57,8 +57,28 @@ const getPastTransactions = async (req, res, next) => {
     }
 };
 
+const getTransactionDetails = async (req, res, next) => {
+  try {
+      const connection = await pool.promise().getConnection();
+  
+      const sqlGetTransactionDetails = `SELECT p.product_id, product_name, td.price, quantity FROM transaction_details td
+                                        JOIN products p ON td.product_id = p.product_id 
+                                        WHERE transaction_id = ${req.params.transaction_id};`;
+  
+      const result = await connection.query(sqlGetTransactionDetails);
+      connection.release();
+
+      const transactions = result[0]
+      
+      res.status(200).send({ transactions })
+    } catch (error) {
+      next(error);
+    }
+};
+
 router.get('/get/:user_id', getAllTransactions)
-router.get('/get/ongoing/:user_id', getOngoingTransactions)
 router.get('/get/past/:user_id', getPastTransactions)
+router.get('/get/ongoing/:user_id', getOngoingTransactions)
+router.get('/get/details/:transaction_id', getTransactionDetails)
 
 module.exports = router;
