@@ -1,6 +1,42 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
+const getAll = async (req, res, next) => {
+    try {
+        const connection = await pool.promise().getConnection();
+
+        const sqlGetAll = `SELECT product_name, p.product_id, product_desc, product_image_name, price, c.category_id, category_name FROM products p 
+                          JOIN product_categories pc ON p.product_id = pc.product_id 
+                          JOIN categories c ON pc.category_id = c.category_id;`;
+
+        const result = await connection.query(sqlGetAll)
+        connection.release();
+
+        const products = result[0]
+
+        res.status(200).send({ products })
+    } catch (error) {
+      next (error)
+    }
+};
+
+const getSearch = async (req, res, next) => {
+    const filterCategory = req.query.category_name ? ` WHERE category_name = "${req.query.category_name}"` : "";
+
+    const sqlGetSearchProductsCount = `SELECT product_name, p.product_id, product_desc, product_image_name, price, c.category_id, category_name FROM products p 
+                                       JOIN product_categories pc ON p.product_id = pc.product_id 
+                                       JOIN categories c ON pc.category_id = c.category_id
+                                       ${filterCategory} AND product_name LIKE '%${req.query.product_name}%' 
+                                       ORDER BY ${req.query.sortBy} ${req.query.typeSort};`;
+
+    const result = await connection.query(sqlGetSearchProductsCount)
+    connection.release();
+                  
+    const products = result[0]
+                  
+    res.status(200).send({ products });
+};
+
 // Get All Products OR Get Searched Products
 const getAllProducts = async (req, res, next) => {
     try {
@@ -22,10 +58,10 @@ const getAllProducts = async (req, res, next) => {
           const filterCategory = req.query.category_name ? ` WHERE category_name = "${req.query.category_name}"` : "";
 
           const sqlGetSearchProducts = `SELECT product_name, p.product_id, product_desc, product_image_name, price, c.category_id, category_name FROM products p 
-                                            JOIN product_categories pc ON p.product_id = pc.product_id 
-                                            JOIN categories c ON pc.category_id = c.category_id
-                                            ${filterCategory} AND product_name LIKE '%${req.query.product_name}%' 
-                                            ORDER BY ${req.query.sortBy} ${req.query.typeSort} LIMIT ? OFFSET ?;`
+                                        JOIN product_categories pc ON p.product_id = pc.product_id 
+                                        JOIN categories c ON pc.category_id = c.category_id
+                                        ${filterCategory} AND product_name LIKE '%${req.query.product_name}%' 
+                                        ORDER BY ${req.query.sortBy} ${req.query.typeSort} LIMIT ? OFFSET ?;`
           const dataGetSearchProducts = [ Number(req.query.itemsPerPage), Number(req.query.OFFSET) ]
 
           if (req.query.category_name || req.query.product_name || req.query.sortBy || req.query.typeSort) {
@@ -74,7 +110,9 @@ const getProductsById = async (req, res, next) => {
   }
 };
 
+router.get("/all", getAll);
+router.get("/search", getSearch);
 router.get("/get", getAllProducts);
-router.get('/:product_id', getProductsById);
+router.get("/:product_id", getProductsById);
 
 module.exports = router;
