@@ -9,6 +9,8 @@ const deleteProductRouter = require("./delete.products");
 const removeProductRouter = require("./put.products");
 const updateProductRouter = require("./put.products");
 
+const postNewProductsRouter = require("./post.products");
+
 router.use(getAllRouter);
 router.use(getAllProductsRouter);
 router.use(getProductsByIdRouter);
@@ -17,5 +19,7 @@ router.use(deleteProductRouter);
 
 router.use(removeProductRouter);
 router.use(updateProductRouter);
+
+router.use(postNewProductsRouter);
 
 module.exports = router;

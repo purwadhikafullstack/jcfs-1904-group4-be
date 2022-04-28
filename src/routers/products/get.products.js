@@ -8,6 +8,7 @@ const getAll = async (req, res, next) => {
       const sqlGetAll = 'SELECT product_id, product_name, product_desc, product_image_name, price FROM products;';
 
       const [result] = await connection.query(sqlGetAll);
+      connection.release();
 
       res.status(200).send({ result });
   } catch (error) {
