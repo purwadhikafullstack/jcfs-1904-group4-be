@@ -30,7 +30,7 @@ const getAllProducts = async (req, res, next) => {
                                             JOIN product_categories pc ON p.product_id = pc.product_id 
                                             JOIN categories c ON pc.category_id = c.category_id
                                             ${filterCategory} AND product_name LIKE '%${req.query.product_name}%' AND is_deleted = 0 
-                                            ORDER BY ${req.query.sortBy} ${req.query.typeSort} LIMIT ? OFFSET ?;`
+                                            ORDER BY ${req.query.sortBy} ${req.query.typeSort} LIMIT ? OFFSET ?;`;
               const dataGetSearchProducts = [ Number(req.query.itemsPerPage), Number(req.query.OFFSET) ]
 
           if (req.query.category_id || req.query.product_name || req.query.sortBy || req.query.typeSort) {
