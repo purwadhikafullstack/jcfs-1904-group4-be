@@ -1,6 +1,20 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
+const getAll = async (req, res, next) => {
+  try {
+      const connection = await pool.promise().getConnection();
+
+      const sqlGetAll = 'SELECT product_id, product_name, product_desc, product_image_name, price FROM products;';
+
+      const [result] = await connection.query(sqlGetAll);
+
+      res.status(200).send({ result });
+  } catch (error) {
+      next (error)
+  }
+};
+
 // Get All Products OR Get Searched Products
 const getAllProducts = async (req, res, next) => {
 
@@ -74,6 +88,7 @@ const getProductsById = async (req, res, next) => {
   }
 };
 
+router.get("/getAll", getAll);
 router.get("/get", getAllProducts);
 router.get("/:product_id", getProductsById);
 

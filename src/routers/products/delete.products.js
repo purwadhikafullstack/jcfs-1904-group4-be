@@ -16,6 +16,6 @@ const deleteProduct = async (req, res, next) => {
     }
   };
 
-router.delete("/delete", deleteProduct)
+router.delete("/delete/:product_id", deleteProduct)
 
 module.exports = router;
