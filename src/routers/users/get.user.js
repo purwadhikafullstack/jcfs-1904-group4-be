@@ -20,6 +20,23 @@ const getAllUser = async (req, res, next) => {
   }
 };
 
+const getUserById = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetUserById = `SELECT * FROM users WHERE user_id = ${req.params.user_id};`;
+
+    const result = await connection.query(sqlGetUserById);
+    connection.release();
+
+    const user = result[0];
+
+    res.status(200).send({ user });
+  } catch (error) {
+    next(error);
+  }
+}
+
 const getVerify = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
@@ -55,6 +72,7 @@ const getUserPicture = async (req, res, next) => {
 };
 
 router.get('/picture/:user_id', auth, getUserPicture)
+router.get('/get/:user_id', getUserById)
 router.get('/getAll', auth, getAllUser);
 router.get('/verify', getVerify);
 

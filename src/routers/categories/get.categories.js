@@ -2,7 +2,7 @@ const router = require("express").Router();
 const pool = require("../../config/database");
 
 // Product Category
-const getAllCategoriesRouter = router.get("/get", async (req, res, next) => {
+const getAllCategories = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
         await connection.beginTransaction();
@@ -24,6 +24,8 @@ const getAllCategoriesRouter = router.get("/get", async (req, res, next) => {
     } catch (error) {
       next (error)
     };
-});
+};
 
-module.exports = { getAllCategoriesRouter };
+router.get("/get", getAllCategories)
+
+module.exports = router;

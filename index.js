@@ -6,10 +6,13 @@ const cors = require("cors");
 const app = express();
 const port = process.env.API_PORT;
 
-const productsRouter = require('./src/routers/products/index')
+const transactionsRouter = require('./src/routers/transactions/index')
 const categoriesRouter = require('./src/routers/categories/index')
+const warehouseRouter = require('./src/routers/warehouses/index')
 const addressRouter = require('./src/routers/addressUsers/index')
+const productsRouter = require('./src/routers/products/index')
 const userRouter = require('./src/routers/users/index');
+const cartRouter = require('./src/routers/carts/index')
 
 app.use(cors());
 app.use(express.json());
@@ -19,10 +22,13 @@ app.get("/", (req, res) => {
   res.status(200).send("4-Warehouse API");
 });
 
-app.use("/products", productsRouter);
+app.use("/transactions", transactionsRouter)
 app.use("/categories", categoriesRouter);
+app.use("/warehouses", warehouseRouter);
+app.use("/products", productsRouter);
 app.use("/address", addressRouter);
 app.use("/users", userRouter);
+app.use("/cart", cartRouter);
 
 app.use((error, req, res, next) => {
   console.log({ error });

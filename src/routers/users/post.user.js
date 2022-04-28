@@ -1,6 +1,6 @@
 require('dotenv').config();
 const router = require('express').Router();
-const upload = require('../../services/upload/')
+const upload = require('../../services/upload/index')
 const pool = require('../../config/database');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -36,8 +36,6 @@ const postLoginUser = async (req, res, next) => {
     next(error);
   }
 };
-
-// const postRegisterUser = router.post('/register', async (req, res, next) => {});
 
 // Upload Photo
 const multerUpload = upload.single('photo');

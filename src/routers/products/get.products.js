@@ -2,7 +2,7 @@ const router = require("express").Router();
 const pool = require("../../config/database");
 
 // Get All Products OR Get Searched Products
-const getAllProductsRouter = router.get("/get", async (req, res, next) => {
+const getAllProducts = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
         await connection.beginTransaction();
@@ -53,10 +53,10 @@ const getAllProductsRouter = router.get("/get", async (req, res, next) => {
   } catch (error) {
     next (error)
   };
-});
+};
 
 // Get Products by ID
-const getProductsByIdRouter = router.get('/:product_id', async (req, res, next) => {
+const getProductsById = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
@@ -72,6 +72,9 @@ const getProductsByIdRouter = router.get('/:product_id', async (req, res, next) 
   } catch (error) {
     next(error);
   }
-});
+};
 
-module.exports = { getAllProductsRouter, getProductsByIdRouter };
+router.get("/get", getAllProducts);
+router.get('/:product_id', getProductsById);
+
+module.exports = router;

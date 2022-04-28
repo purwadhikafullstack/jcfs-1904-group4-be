@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
-const { getAllProductsRouter, getProductsByIdRouter } = require("./get.products");
+const getAllProductsRouter = require("./get.products");
+const getProductsByIdRouter = require("./get.products");
 
 router.use(getAllProductsRouter);
 router.use(getProductsByIdRouter);
