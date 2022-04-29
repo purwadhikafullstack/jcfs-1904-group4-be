@@ -25,7 +25,7 @@ const postNewProductCategory = async (req, res, next) => {
         const connection = await pool.promise().getConnection();
   
         const sqlPostProductCategory = `INSERT INTO product_categories SET
-                                        product_id = ${req.params.product_id},
+                                        product_id = ${req.params.productId},
                                         category_id = ${req.body.category_id};`;
   
         connection.query(sqlPostProductCategory);
@@ -55,7 +55,7 @@ const postPhoto = async (req, res, next) => {
 };
 
 router.post('/new', postNewProducts);
-router.post('/category/:product_id', postNewProductCategory);
+router.post('/category/:productId', postNewProductCategory);
 router.post('/photo/:productId', multerUpload, postPhoto);
 
 module.exports = router;
