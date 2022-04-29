@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const uploadProduct = require("../../services/upload/prodcts")
+const uploadProduct = require("../../services/upload/products")
 
 const postNewProducts = async (req, res, next) => {
     try {
@@ -9,10 +9,29 @@ const postNewProducts = async (req, res, next) => {
         const sqlPostNewProducts = 'INSERT INTO products SET ?';
         const dataPostNewProducts = [ req.body ]
   
-        connection.query(sqlPostNewProducts, dataPostNewProducts);
+        const result = await connection.query(sqlPostNewProducts, dataPostNewProducts);
+        connection.release();
+
+        const { insertId } = result[0]
+  
+        res.status(200).send({ insertId });
+    } catch (error) {
+        next (error)
+    }
+};
+
+const postNewProductCategory = async (req, res, next) => {
+    try {
+        const connection = await pool.promise().getConnection();
+  
+        const sqlPostProductCategory = `INSERT INTO product_categories SET
+                                        product_id = ${req.params.product_id},
+                                        category_id = ${req.body.category_id};`;
+  
+        connection.query(sqlPostProductCategory);
         connection.release();
   
-        res.status(200).send("Successfully added product");
+        res.status(200).send("Successfully added");
     } catch (error) {
         next (error)
     }
@@ -24,7 +43,7 @@ const postPhoto = async (req, res, next) => {
       const connection = await pool.promise().getConnection();
 
       const sqlPostPhoto = `UPDATE products SET product_image_name = ? WHERE product_id = ?;`;
-      const dataPostPhoto = [req.file.filename, req.params.product_id]
+      const dataPostPhoto = [req.file.filename, req.params.productId]
 
       connection.query(sqlPostPhoto, dataPostPhoto);
       connection.release();
@@ -36,6 +55,7 @@ const postPhoto = async (req, res, next) => {
 };
 
 router.post('/new', postNewProducts);
-router.post('/photo/:product_id', multerUpload, postPhoto);
+router.post('/category/:product_id', postNewProductCategory);
+router.post('/photo/:productId', multerUpload, postPhoto);
 
 module.exports = router;

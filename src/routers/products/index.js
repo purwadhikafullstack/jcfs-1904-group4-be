@@ -10,6 +10,7 @@ const removeProductRouter = require("./put.products");
 const updateProductRouter = require("./put.products");
 
 const postPhotoRouter = require("./post.products");
+const postNewProductCategoryRouter = require("./post.products");
 const postNewProductsRouter = require("./post.products");
 
 router.use(getAllRouter);
@@ -22,6 +23,7 @@ router.use(removeProductRouter);
 router.use(updateProductRouter);
 
 router.use(postPhotoRouter);
+router.use(postNewProductCategoryRouter);
 router.use(postNewProductsRouter);
 
 module.exports = router;
