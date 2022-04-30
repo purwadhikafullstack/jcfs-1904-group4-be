@@ -34,9 +34,9 @@ const getCartByProductId = async (req, res, next) => {
             connection.release();
 
             const data = result[0]
-            const cart = data[0]
+            const cartProduct = data[0]
 
-            res.status(200).send({ cart })
+            res.status(200).send({ cartProduct })
         } catch (error) {
           next (error)
     }
