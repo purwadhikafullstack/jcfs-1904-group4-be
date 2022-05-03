@@ -7,6 +7,7 @@ const postProofRouter = require('./post.transactions')
 
 const getAllTransactionsRouter = require('./get.transactions')
 const getPastTransactionsRouter = require('./get.transactions')
+const getSearchTransactionsRouter =require('./get.transactions')
 const getTransactionDetailsRouter = require('./get.transactions')
 const getOngoingTransactionsRouter = require('./get.transactions')
 
@@ -19,6 +20,7 @@ router.use(postProofRouter);
 
 router.use(getAllTransactionsRouter);
 router.use(getPastTransactionsRouter);
+router.use(getSearchTransactionsRouter);
 router.use(getTransactionDetailsRouter);
 router.use(getOngoingTransactionsRouter);
 

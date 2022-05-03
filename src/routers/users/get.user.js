@@ -20,6 +20,23 @@ const getAllUser = async (req, res, next) => {
   }
 };
 
+const getUserId = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetUserName = `SELECT user_id FROM users WHERE full_name LIKE '%${req.query.full_name}%';`;
+
+    const result = await connection.query(sqlGetUserName);
+    connection.release();
+
+    const user = result[0];
+
+    res.status(200).send({ user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUserById = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
@@ -71,9 +88,28 @@ const getUserPicture = async (req, res, next) => {
   }
 };
 
-router.get('/picture/:user_id', auth, getUserPicture)
-router.get('/get/:user_id', getUserById)
+const getWarehouseId = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetUserProfile = `SELECT warehouse_id FROM users WHERE user_id = ${req.params.user_id}`
+
+    const result = await connection.query(sqlGetUserProfile);
+    connection.release();
+
+    const id = result[0]
+
+    res.status(200).send({ id });
+  } catch (error) {
+    next (error)
+  }
+};
+
+router.get('/picture/:user_id', auth, getUserPicture);
+router.get('/wh_id/:user_id', getWarehouseId);
+router.get('/get/:user_id', getUserById);
 router.get('/getAll', auth, getAllUser);
 router.get('/verify', getVerify);
+router.use('/id', getUserId);
 
 module.exports = router;
