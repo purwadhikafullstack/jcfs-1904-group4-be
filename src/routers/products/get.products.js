@@ -34,7 +34,7 @@ const getAllProducts = async (req, res, next) => {
               // Query base tanpa WHERE category_name
               // Jika req.query.category_name ada isinya, Query base disisipkan WHERE category_name
               
-              const filterCategory = req.query.category_id ? ` WHERE category_id = "${req.query.category_id}"` : "";
+              const filterCategory = req.query.category_id ? `WHERE pc.category_id = "${req.query.category_id}"` : "";
 
               const sqlCountSearchProducts = `SELECT COUNT(*) AS count FROM product_categories pc
                                               JOIN products p ON p.product_id = pc.product_id 
