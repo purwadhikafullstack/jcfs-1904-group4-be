@@ -5,10 +5,28 @@ const getAllTransactions = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
     
-        const sqlGetAllTransactions = `SELECT * FROM transactions WHERE user_id = ?;`;
-        const sqlDataAllTransactions = req.params.user_id;
+        const sqlGetAllTransactions = `SELECT * FROM transactions WHERE warehouse_id = ?;`;
+        const sqlDataAllTransactions = req.params.warehouse_id;
     
         const result = await connection.query(sqlGetAllTransactions, sqlDataAllTransactions);
+        connection.release();
+
+        const transactions = result[0]
+        
+        res.status(200).send({ transactions })
+      } catch (error) {
+        next(error);
+      }
+};
+
+const getAllTransactionsById = async (req, res, next) => {
+    try {
+        const connection = await pool.promise().getConnection();
+    
+        const sqlGetAllTransactionsById = `SELECT * FROM transactions WHERE user_id = ?;`;
+        const sqlDataAllTransactionsById = req.params.user_id;
+    
+        const result = await connection.query(sqlGetAllTransactionsById, sqlDataAllTransactionsById);
         connection.release();
 
         const transactions = result[0]
@@ -81,8 +99,8 @@ const getSearchTransactions = async (req, res, next) => {
       const connection = await pool.promise().getConnection();
   
       const sqlGetSearchTransaction = `SELECT * FROM transactions 
-                                       WHERE user_id = ${req.params.user_id} 
-                                       AND warehouse_id = ${req.params.id};`;
+                                       WHERE recipient LIKE '%${req.query.recipient_name}%' 
+                                       AND warehouse_id = ${req.query.warehouse_id};`;
   
       const result = await connection.query(sqlGetSearchTransaction);
       connection.release();
@@ -95,9 +113,10 @@ const getSearchTransactions = async (req, res, next) => {
     }
 };
 
-router.get('/get/:user_id', getAllTransactions)
+router.get('/get/search', getSearchTransactions)
+router.get('/get/:user_id', getAllTransactionsById)
 router.get('/get/past/:user_id', getPastTransactions)
-router.get('/get/:user_id/:id', getSearchTransactions)
+router.get('/get/wh/:warehouse_id', getAllTransactions)
 router.get('/get/ongoing/:user_id', getOngoingTransactions)
 router.get('/get/details/:transaction_id', getTransactionDetails)
 
