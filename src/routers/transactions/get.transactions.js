@@ -113,7 +113,7 @@ const getSearchTransactions = async (req, res, next) => {
     }
 };
 
-router.get('/get/search', getSearchTransactions)
+router.get('/search', getSearchTransactions)
 router.get('/get/:user_id', getAllTransactionsById)
 router.get('/get/past/:user_id', getPastTransactions)
 router.get('/get/wh/:warehouse_id', getAllTransactions)

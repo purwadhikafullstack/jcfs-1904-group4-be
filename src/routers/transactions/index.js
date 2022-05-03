@@ -12,6 +12,8 @@ const getTransactionDetailsRouter = require('./get.transactions')
 const getAllTransactionsByIdRouter = require('./get.transactions')
 const getOngoingTransactionsRouter = require('./get.transactions')
 
+const putRejectPhotoRouter = require('./put.transactions')
+const putConfirmPhotoRouter = require('./put.transactions')
 const putStatusTransactionsRouter = require('./put.transactions')
 
 router.use(postTransactionDetailsRouter);
@@ -26,6 +28,8 @@ router.use(getTransactionDetailsRouter);
 router.use(getAllTransactionsByIdRouter);
 router.use(getOngoingTransactionsRouter);
 
+router.use(putRejectPhotoRouter);
+router.use(putConfirmPhotoRouter);
 router.use(putStatusTransactionsRouter);
 
 module.exports = router;
