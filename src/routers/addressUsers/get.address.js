@@ -46,7 +46,6 @@ const getChosenAddress = async (req, res, next) => {
     const result = await connection.query(sqlGetChosenAddress);
     connection.release();
 
-    console.log(result[0])
     const address = result[0]
     
     res.status(200).send({ address })
