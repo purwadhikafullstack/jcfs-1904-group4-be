@@ -9,6 +9,7 @@ const putUserDataRouter = require('./put.user');
 const putResetPasswordRouter = require('./put.user');
 
 const getWarehouseIdRouter = require('./get.user');
+const getUserDataRouter = require('./get.user');
 const getAllUserRouter = require('./get.user');
 const getUserByIdRouter = require('./get.user');
 const getVerifyUserRouter = require('./get.user');
@@ -25,6 +26,7 @@ router.use(putResetPasswordRouter);
 router.use(getUserPictureRouter);
 router.use(getWarehouseIdRouter);
 router.use(getVerifyUserRouter);
+router.use(getUserDataRouter);
 router.use(getUserByIdRouter);
 router.use(getAllUserRouter);
 
