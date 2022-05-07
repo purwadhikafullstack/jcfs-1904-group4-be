@@ -54,8 +54,28 @@ const getChosenAddress = async (req, res, next) => {
   }
 };
 
+const getTransactionAddress = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetTransactionAddress = `SELECT a.address_id, province, city, village, district, postal_code, detail_address FROM address_users a
+                                      JOIN transactions t ON a.address_id = t.address_id
+                                      WHERE transaction_id = ${req.params.transaction_id};`;
+
+    const result = await connection.query(sqlGetTransactionAddress);
+    connection.release();
+
+    const address = result[0]
+    
+    res.status(200).send({ address })
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.get('/:user_id', getUserAddress);
 router.get('/default/:user_id', getDefaultAddress);
 router.get('/chosen/:address_id', getChosenAddress);
+router.get('/transaction/:transaction_id', getTransactionAddress);
 
 module.exports = router;
