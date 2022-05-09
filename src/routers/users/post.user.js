@@ -1,8 +1,10 @@
 require('dotenv').config();
 const router = require('express').Router();
+const upload = require('../../services/upload/index')
 const pool = require('../../config/database');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
 const { sign, verify } = require('../../services/token');
 const sendEmail = require('../../services/email');
 
@@ -28,10 +30,28 @@ const postLoginUser = async (req, res, next) => {
     if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
 
     const token = sign({ id: user[0].user_id });
-
+    
     res.status(200).send({ user: user[0], token });
   } catch (error) {
     next(error);
+  }
+};
+
+// Upload Photo
+const multerUpload = upload.single('photo');
+const postUserPhoto = async (req, res, next) => {
+  try {
+      const connection = await pool.promise().getConnection();
+
+      const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
+      const dataPostUserPhoto = [req.file.filename, req.params.user_id]
+
+      const result = await connection.query(sqlPostUserPhoto, dataPostUserPhoto);
+      connection.release();
+
+      res.status(200).send("Update was successful");
+  } catch (error) {
+    next (error)
   }
 };
 
@@ -115,6 +135,7 @@ const postForgotPassword = async (req, res, next) => {
   }
 };
 
+router.post('/upload/:user_id', multerUpload, auth, postUserPhoto);
 router.post('/login', postLoginUser);
 router.post('/register', postRegisterUser);
 router.post('/forgot-password', postForgotPassword);

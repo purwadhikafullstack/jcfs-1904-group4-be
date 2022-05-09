@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
-const getTotalSalesRouter = require('./get.salesReport');
-const getThisMonthTotalSalesRouter = require('./get.salesReport');
-const getRangeMonthRouter = require('./get.salesReport');
-const getRangeYearRouter = require('./get.salesReport');
+const getTotalSalesRouter = require('./post.salesReport');
+const getThisMonthTotalSalesRouter = require('./post.salesReport');
+const getRangeMonthRouter = require('./post.salesReport');
+const getRangeYearRouter = require('./post.salesReport');
 
 router.use(getTotalSalesRouter);
 router.use(getThisMonthTotalSalesRouter);
