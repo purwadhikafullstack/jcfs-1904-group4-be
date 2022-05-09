@@ -27,12 +27,10 @@ const postTransactionDetails = async (req, res, next) => {
         const { transaction_id, carts } = req.body
 
         const sqlPostTransactionDetails = `INSERT INTO transaction_details (transaction_id, product_id, quantity, price) 
-                                  VALUES ${generateString(transaction_id, carts)};`;
+                                           VALUES ${generateString(transaction_id, carts)};`;
             
         connection.query(sqlPostTransactionDetails)
         connection.release();
-
-        console.log(sqlPostTransactionDetails)
 
         res.status(200).send("Successfully added to orders")
     } catch (error) {

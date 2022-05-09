@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 
-const putStatusTransactions = async (req, res, next) => {
+const putPhotoTransactions = async (req, res, next) => {
     try {
         const connection = await pool.promise().getConnection();
     
@@ -18,6 +18,6 @@ const putStatusTransactions = async (req, res, next) => {
       }
 };
 
-router.put('/status/:user_id/:transaction_id', putStatusTransactions)
+router.put('/status/:user_id/:transaction_id', putPhotoTransactions)
 
 module.exports = router;

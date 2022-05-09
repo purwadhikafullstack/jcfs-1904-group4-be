@@ -71,8 +71,44 @@ const getUserPicture = async (req, res, next) => {
   }
 };
 
-router.get('/picture/:user_id', auth, getUserPicture)
-router.get('/get/:user_id', getUserById)
+const getWarehouseId = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetUserProfile = `SELECT warehouse_id FROM users WHERE user_id = ${req.params.user_id}`
+
+    const result = await connection.query(sqlGetUserProfile);
+    connection.release();
+
+    const warehouse_id = result[0]
+
+    res.status(200).send({ warehouse_id });
+  } catch (error) {
+    next (error)
+  }
+};
+
+const getUserData = async (req, res, next) => {
+  try {
+    const connection = await pool.promise().getConnection();
+
+    const sqlGetUserData = `SELECT full_name, email, gender, age FROM users WHERE user_id = ${req.params.user_id}`
+
+    const result = await connection.query(sqlGetUserData);
+    connection.release();
+
+    const user_data = result[0]
+
+    res.status(200).send({ user_data });
+  } catch (error) {
+    next (error)
+  }
+};
+
+router.get('/picture/:user_id', auth, getUserPicture);
+router.get('/wh_id/:user_id', getWarehouseId);
+router.get('/profile/:user_id', getUserData);
+router.get('/get/:user_id', getUserById);
 router.get('/getAll', auth, getAllUser);
 router.get('/verify', getVerify);
 
