@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.API_PORT;
 
 const transactionsRouter = require('./src/routers/transactions/index');
+const salesReportRouter = require('./src/routers/salesReport/index');
 const categoriesRouter = require('./src/routers/categories/index');
 const warehouseRouter = require('./src/routers/warehouses/index');
 const addressRouter = require('./src/routers/addressUsers/index');
@@ -22,8 +23,8 @@ app.get('/', (req, res) => {
   res.status(200).send('4-Warehouse API');
 });
 
-app.use('/sales-report', salesReportRouter);
 app.use('/transactions', transactionsRouter);
+app.use('/sales-report', salesReportRouter);
 app.use('/categories', categoriesRouter);
 app.use('/warehouses', warehouseRouter);
 app.use('/products', productsRouter);

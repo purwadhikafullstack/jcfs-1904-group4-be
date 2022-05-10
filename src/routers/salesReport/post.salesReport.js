@@ -90,7 +90,7 @@ const getRangeYear = async (req, res, next) => {
   }
 };
 
-router.post('/total-sales', auth, getTotalSales);
+router.post('/total-sales', getTotalSales);
 router.post('/month-total-sales', getThisMonthTotalSales);
 router.post('/range-month-report', getRangeMonth);
 router.post('/range-year-report', getRangeYear);
