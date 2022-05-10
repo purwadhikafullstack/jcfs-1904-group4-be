@@ -122,7 +122,7 @@ const getPastTransactionsById = async (req, res, next) => {
       const connection = await pool.promise().getConnection();
   
       const sqlGetPastTransactions = `SELECT * FROM transactions WHERE user_id = ${req.params.user_id} AND 
-                                      status = 'arrived ORDER BY created_at DESC`;
+                                      status = 'arrived' ORDER BY created_at DESC`;
 
       const result = await connection.query(sqlGetPastTransactions);
       connection.release();
