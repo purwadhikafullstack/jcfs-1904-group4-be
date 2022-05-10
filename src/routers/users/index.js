@@ -29,5 +29,6 @@ router.use(getVerifyUserRouter);
 router.use(getUserDataRouter);
 router.use(getUserByIdRouter);
 router.use(getAllUserRouter);
+router.use(getVerifyUserRouter);
 
 module.exports = router;
