@@ -8,7 +8,7 @@ const putUserData = async (req, res, next) => {
         const connection = await pool.promise().getConnection();
 
         const sqlPutUserProfile = `UPDATE users SET ? WHERE user_id = ?;`;
-        const dataPutUserProfile = [req.body, req.params.user_id]
+        const dataPutUserProfile = [ req.body, req.params.user_id ]
 
         connection.query(sqlPutUserProfile, dataPutUserProfile);
         connection.release();
