@@ -40,3 +40,8 @@ app.use((error, req, res, next) => {
     data: error,
   });
 });
+
+app.listen(port, (err) => {
+  if (err) return console.log({ err });
+  console.log(`4_Warehouse is running at ${port}`);
+});
