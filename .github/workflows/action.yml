@@ -4,7 +4,7 @@ name: 4_warehouse
 on:
   push:
     branches:
-      - master
+      - dev
 
 jobs:
   cd:
@@ -22,6 +22,6 @@ jobs:
           port: 22
           script: |
             cd ~/app/jcfs-1904-group4-be
-            git pull origin master
+            git pull origin dev
             npm install
-            pm2 restart api-4-warehouse
+            pm2 restart 4-warehouse
