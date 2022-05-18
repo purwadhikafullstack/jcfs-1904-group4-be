@@ -1,16 +1,16 @@
-require('dotenv').config();
-const router = require('express').Router();
-const upload = require('../../services/upload/index')
-const pool = require('../../config/database');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const auth = require('../../middleware/auth');
-const { sign, verify } = require('../../services/token');
-const sendEmail = require('../../services/email');
+require("dotenv").config();
+const router = require("express").Router();
+const upload = require("../../services/upload/index");
+const pool = require("../../config/database");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const auth = require("../../middleware/auth");
+const { sign, verify } = require("../../services/token");
+const sendEmail = require("../../services/email");
+const connection = await pool.promise().getConnection();
 
 const postLoginUser = async (req, res, next) => {
   try {
-    const connection = await pool.promise().getConnection();
     const { username, password } = req.body;
 
     const sqlLoginUser = `SELECT user_id, username, full_name, email, password, role, is_verified, warehouse_id FROM users WHERE username = ?;`;
@@ -21,49 +21,50 @@ const postLoginUser = async (req, res, next) => {
 
     const user = result[0];
 
-    if (!user) return res.status(404).send({ message: 'User not found' });
+    if (!user) return res.status(404).send({ message: "User not found" });
 
     const compareResult = bcrypt.compareSync(password, user[0].password);
 
-    if (!compareResult) return res.status(401).send({ message: 'Wrong password' });
+    if (!compareResult)
+      return res.status(401).send({ message: "Wrong password" });
 
-    if (!user[0]?.is_verified) return res.status(401).send({ message: 'Please verify your account' });
+    if (!user[0]?.is_verified)
+      return res.status(401).send({ message: "Please verify your account" });
 
     const token = sign({ id: user[0].user_id });
-    
+
     res.status(200).send({ user: user[0], token });
   } catch (error) {
+    connection.release();
     next(error);
   }
 };
 
 // Upload Photo
-const multerUpload = upload.single('photo');
+const multerUpload = upload.single("photo");
 const postUserPhoto = async (req, res, next) => {
   try {
-      const connection = await pool.promise().getConnection();
+    const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
+    const dataPostUserPhoto = [req.file.filename, req.params.user_id];
 
-      const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
-      const dataPostUserPhoto = [req.file.filename, req.params.user_id]
+    const result = await connection.query(sqlPostUserPhoto, dataPostUserPhoto);
+    connection.release();
 
-      const result = await connection.query(sqlPostUserPhoto, dataPostUserPhoto);
-      connection.release();
-
-      res.status(200).send("Update was successful");
+    res.status(200).send("Update was successful");
   } catch (error) {
-    next (error)
+    connection.release();
+    next(error);
   }
 };
 
 const postRegisterUser = async (req, res, next) => {
   try {
-    const connection = await pool.promise().getConnection();
-
     const sqlRegisterUser = `INSERT INTO users SET ?`;
     const sqlDataUser = req.body;
 
     const isEmail = validator.isEmail(sqlDataUser.email);
-    if (!isEmail) return res.status(401).send({ message: 'Format email salah' });
+    if (!isEmail)
+      return res.status(401).send({ message: "Format email salah" });
 
     sqlDataUser.password = bcrypt.hashSync(sqlDataUser.password);
 
@@ -75,8 +76,8 @@ const postRegisterUser = async (req, res, next) => {
 
     sendEmail({
       recipient: sqlDataUser.email,
-      subject: 'Verification',
-      templateName: 'verification.html',
+      subject: "Verification",
+      templateName: "verification.html",
       data: {
         username: sqlDataUser.username,
         url: `${process.env.API_URL}/users/verify?token=${token}`,
@@ -86,7 +87,10 @@ const postRegisterUser = async (req, res, next) => {
     const sqlRegisterGetUser = `SELECT username, role, is_verified FROM users WHERE username = ?`;
     const sqlDataGetUser = req.body.username;
 
-    const resultGetRegister = await connection.query(sqlRegisterGetUser, sqlDataGetUser);
+    const resultGetRegister = await connection.query(
+      sqlRegisterGetUser,
+      sqlDataGetUser
+    );
     connection.release();
 
     const getUser = resultGetRegister[0];
@@ -102,14 +106,13 @@ const postRegisterUser = async (req, res, next) => {
       token,
     });
   } catch (error) {
+    connection.release();
     next(error);
   }
 };
 
 const postForgotPassword = async (req, res, next) => {
   try {
-    const connection = await pool.promise().getConnection();
-
     const sqlForgotPassword = `SELECT user_id FROM users WHERE email = ?;`;
     const sqlDataUser = req.body.email;
 
@@ -121,8 +124,8 @@ const postForgotPassword = async (req, res, next) => {
 
     sendEmail({
       recipient: sqlDataUser,
-      subject: 'Forgot Password',
-      templateName: 'forgotPassword.html',
+      subject: "Forgot Password",
+      templateName: "forgotPassword.html",
       data: {
         email: sqlDataUser,
         url: `${process.env.CLIENT_URL}/reset-password/${token}`,
@@ -131,13 +134,14 @@ const postForgotPassword = async (req, res, next) => {
 
     res.status(200).send({ user: user[0], token });
   } catch (error) {
+    connection.release();
     console.log({ error });
   }
 };
 
-router.post('/upload/:user_id', multerUpload, auth, postUserPhoto);
-router.post('/login', postLoginUser);
-router.post('/register', postRegisterUser);
-router.post('/forgot-password', postForgotPassword);
+router.post("/upload/:user_id", multerUpload, auth, postUserPhoto);
+router.post("/login", postLoginUser);
+router.post("/register", postRegisterUser);
+router.post("/forgot-password", postForgotPassword);
 
 module.exports = router;

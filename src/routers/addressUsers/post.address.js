@@ -1,22 +1,25 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
+const connection = await pool.promise().getConnection();
 
 const postUserAddress = async (req, res, next) => {
-        try {
-            const connection = await pool.promise().getConnection();
+  try {
+    const sqlPostUserAddress = "INSERT INTO address_users SET ?;";
+    const dataPostUserAddress = [req.body];
 
-            const sqlPostUserAddress = "INSERT INTO address_users SET ?;";
-            const dataPostUserAddress = [ req.body ]
+    const result = await connection.query(
+      sqlPostUserAddress,
+      dataPostUserAddress
+    );
+    connection.release();
 
-            const result = await connection.query(sqlPostUserAddress, dataPostUserAddress)
-            connection.release();
-
-            res.status(200).send("Address successfully added")
-        } catch (error) {
-          next (error)
-        }
+    res.status(200).send("Address successfully added");
+  } catch (error) {
+    connection.release();
+    next(error);
+  }
 };
 
-router.post("/new", postUserAddress)
+router.post("/new", postUserAddress);
 
 module.exports = router;

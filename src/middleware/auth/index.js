@@ -1,12 +1,12 @@
-const connection = require('../../config/database');
-const pool = require('../../config/database');
-const { verify } = require('../../services/token');
+// const connection = require('../../config/database');
+const pool = require("../../config/database");
+const { verify } = require("../../services/token");
 
 const auth = async (req, res, next) => {
   try {
     const connection = await pool.promise().getConnection();
 
-    const token = req.headers.authorization.replace('Bearer ', '');
+    const token = req.headers.authorization.replace("Bearer ", "");
     const verifiedToken = verify(token);
 
     const dataGetUser = verifiedToken.id;
@@ -20,11 +20,12 @@ const auth = async (req, res, next) => {
     req.user = user;
 
     if (!user) {
-      res.status(404).send({ message: 'User not found' });
+      res.status(404).send({ message: "User not found" });
     }
 
     next();
   } catch (error) {
+    connection.release();
     next(error);
   }
 };
