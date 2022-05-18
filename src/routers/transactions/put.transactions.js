@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const putPhotoTransactions = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPutStatusTransactions = `UPDATE transactions SET status = "waiting_confirmation"
                                           WHERE user_id = ${req.params.user_id} 

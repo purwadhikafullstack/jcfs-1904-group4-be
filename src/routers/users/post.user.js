@@ -7,9 +7,9 @@ const bcrypt = require("bcryptjs");
 const auth = require("../../middleware/auth");
 const { sign, verify } = require("../../services/token");
 const sendEmail = require("../../services/email");
-const connection = await pool.promise().getConnection();
 
 const postLoginUser = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const { username, password } = req.body;
 
@@ -43,6 +43,7 @@ const postLoginUser = async (req, res, next) => {
 // Upload Photo
 const multerUpload = upload.single("photo");
 const postUserPhoto = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostUserPhoto = `UPDATE users SET profile_image_name = ? WHERE user_id = ?;`;
     const dataPostUserPhoto = [req.file.filename, req.params.user_id];
@@ -58,6 +59,7 @@ const postUserPhoto = async (req, res, next) => {
 };
 
 const postRegisterUser = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlRegisterUser = `INSERT INTO users SET ?`;
     const sqlDataUser = req.body;
@@ -112,6 +114,7 @@ const postRegisterUser = async (req, res, next) => {
 };
 
 const postForgotPassword = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlForgotPassword = `SELECT user_id FROM users WHERE email = ?;`;
     const sqlDataUser = req.body.email;

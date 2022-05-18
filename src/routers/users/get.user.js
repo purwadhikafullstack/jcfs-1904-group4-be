@@ -2,9 +2,9 @@ const router = require("express").Router();
 const pool = require("../../config/database");
 const auth = require("../../middleware/auth");
 const { verify } = require("../../services/token");
-const connection = await pool.promise().getConnection();
 
 const getAllUser = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUsers = `SELECT * FROM users;`;
 
@@ -21,6 +21,7 @@ const getAllUser = async (req, res, next) => {
 };
 
 const getUserById = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUserById = `SELECT * FROM users WHERE user_id = ${req.params.user_id};`;
 
@@ -37,6 +38,7 @@ const getUserById = async (req, res, next) => {
 };
 
 const getVerify = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const verifiedToken = verify(req.query.token);
 
@@ -55,6 +57,7 @@ const getVerify = async (req, res, next) => {
 };
 
 const getUserPicture = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUserProfile = `SELECT profile_image_name FROM users WHERE user_id = ${req.params.user_id}`;
 
@@ -69,6 +72,7 @@ const getUserPicture = async (req, res, next) => {
 };
 
 const getWarehouseId = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUserProfile = `SELECT warehouse_id FROM users WHERE user_id = ${req.params.user_id}`;
 
@@ -85,6 +89,7 @@ const getWarehouseId = async (req, res, next) => {
 };
 
 const getUserData = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUserData = `SELECT full_name, email, gender, age FROM users WHERE user_id = ${req.params.user_id}`;
 

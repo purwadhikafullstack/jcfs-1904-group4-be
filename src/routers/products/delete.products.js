@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const deleteProduct = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlDeleteProducts = `DELETE FROM products WHERE product_id = ${req.params.product_id};`;
 

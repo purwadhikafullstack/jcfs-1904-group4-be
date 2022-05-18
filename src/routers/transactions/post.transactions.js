@@ -2,9 +2,9 @@ const router = require("express").Router();
 const pool = require("../../config/database");
 const uploadTransaction = require("../../services/upload/transactions");
 const generateString = require("../../services/helpers");
-const connection = await pool.promise().getConnection();
 
 const postTransaction = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostTransaction = "INSERT INTO transactions SET ?;";
     const dataPostTransaction = [req.body];
@@ -25,6 +25,7 @@ const postTransaction = async (req, res, next) => {
 };
 
 const postTransactionDetails = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const { transaction_id, carts } = req.body;
 
@@ -47,6 +48,7 @@ const postTransactionDetails = async (req, res, next) => {
 // Upload Photo
 const multerUpload = uploadTransaction.single("photo");
 const postTransactionPhoto = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostUserPhoto = `UPDATE transactions SET proof_image = ? WHERE user_id = ?;`;
     const dataPostUserPhoto = [req.file.filename, req.params.user_id];

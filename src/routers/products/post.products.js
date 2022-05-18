@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
 const uploadProduct = require("../../services/upload/products");
-const connection = await pool.promise().getConnection();
 
 const postNewProducts = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostNewProducts = "INSERT INTO products SET ?";
     const dataPostNewProducts = [req.body];
@@ -24,6 +24,7 @@ const postNewProducts = async (req, res, next) => {
 };
 
 const postNewProductCategory = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostProductCategory = `INSERT INTO product_categories SET
                                         product_id = ${req.params.productId},
@@ -41,6 +42,7 @@ const postNewProductCategory = async (req, res, next) => {
 
 const multerUpload = uploadProduct.single("photo");
 const postPhoto = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostPhoto = `UPDATE products SET product_image_name = ? WHERE product_id = ?;`;
     const dataPostPhoto = [req.file.filename, req.params.productId];

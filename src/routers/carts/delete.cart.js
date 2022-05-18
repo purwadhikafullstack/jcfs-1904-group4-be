@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const deleteFromCart = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlDeleteFromCart = `DELETE FROM cart_details WHERE cart_id = ${req.params.cart_id} AND product_id = ${req.params.product_id}`;
 
@@ -17,6 +17,7 @@ const deleteFromCart = async (req, res, next) => {
 };
 
 const deleteCart = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlDeleteCart = `DELETE FROM carts WHERE cart_id = ${req.params.cart_id}`;
 

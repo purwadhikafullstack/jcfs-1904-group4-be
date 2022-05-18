@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const removeProduct = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlRemoveProducts = `UPDATE products SET is_deleted = 1 WHERE product_id = ${req.params.product_id};`;
 
@@ -17,6 +17,7 @@ const removeProduct = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlUpdateProducts = `UPDATE products SET 
                                  product_name = '${req.body.product_name}', 

@@ -3,9 +3,9 @@ moment().format();
 const router = require("express").Router();
 const pool = require("../../config/database");
 const auth = require("../../middleware/auth");
-const connection = await pool.promise().getConnection();
 
 const getTotalSales = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetTotalTransaction = `SELECT SUM (amount_price) as total_sales FROM transactions WHERE status = "arrived" AND warehouse_id = ?;`;
 
@@ -24,6 +24,7 @@ const getTotalSales = async (req, res, next) => {
 };
 
 const getThisMonthTotalSales = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetTotalTransaction = `SELECT SUM(amount_price) as total_price FROM transactions WHERE MONTH(created_at) = MONTH(now()) AND YEAR(created_at) = YEAR(now()) AND status = "arrived" AND warehouse_id = ?;`;
 
@@ -42,6 +43,7 @@ const getThisMonthTotalSales = async (req, res, next) => {
 };
 
 const getRangeMonth = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const dataStartMonth = req.body.start_month;
     const dataEndMonth = req.body.end_month;
@@ -67,6 +69,7 @@ const getRangeMonth = async (req, res, next) => {
 };
 
 const getRangeYear = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const dataStartYear = req.body.start_year;
     const dataEndYear = req.body.end_year;

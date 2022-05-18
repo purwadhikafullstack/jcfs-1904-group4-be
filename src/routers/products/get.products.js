@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const getAll = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetAll =
       "SELECT product_id, product_name, product_desc, product_image_name, price FROM products;";
@@ -19,6 +19,7 @@ const getAll = async (req, res, next) => {
 
 // Get All Products OR Get Searched Products
 const getAllProducts = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlCountAllProducts = `SELECT COUNT(*) AS count FROM products WHERE is_deleted = 0;`;
 
@@ -86,6 +87,7 @@ const getAllProducts = async (req, res, next) => {
 
 // Get Products by ID
 const getProductsById = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetProductsById = "SELECT * FROM products WHERE product_id = ?;";
     const sqlDataProductsById = req.params.product_id;

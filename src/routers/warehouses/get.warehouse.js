@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const getWarehouse = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlWarehouse = `SELECT warehouse_id, warehouse_name, province FROM warehouses`;
 

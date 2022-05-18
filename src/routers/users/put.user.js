@@ -2,9 +2,9 @@ const router = require("express").Router();
 const pool = require("../../config/database");
 const bcrypt = require("bcryptjs");
 const { sign, verify } = require("../../services/token");
-const connection = await pool.promise().getConnection();
 
 const putUserData = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPutUserProfile = `UPDATE users SET ? WHERE user_id = ?;`;
     const dataPutUserProfile = [req.body, req.params.user_id];
@@ -20,6 +20,7 @@ const putUserData = async (req, res, next) => {
 };
 
 const putResetPassword = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const verifiedToken = verify(req.body.token);
     const sqlDataUser = bcrypt.hashSync(req.body.password);

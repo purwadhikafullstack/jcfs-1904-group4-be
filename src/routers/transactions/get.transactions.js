@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const getAllTransactions = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetAllTransactions = `SELECT * FROM transactions ORDER BY created_at DESC;`;
 
@@ -19,6 +19,7 @@ const getAllTransactions = async (req, res, next) => {
 };
 
 const getPastTransactions = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetPastTransactions = `SELECT * FROM transactions WHERE 
                                       status = 'arrived'
@@ -37,6 +38,7 @@ const getPastTransactions = async (req, res, next) => {
 };
 
 const getOngoingTransactions = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetOngoingTransactions = `SELECT * FROM transactions WHERE 
                                          status = 'waiting_payment' 
@@ -59,6 +61,7 @@ const getOngoingTransactions = async (req, res, next) => {
 };
 
 const getSearchTransactions = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetSearchTransaction = `SELECT * FROM transactions WHERE 
                                        recipient LIKE '%${req.query.recipient_name}%' 
@@ -77,6 +80,7 @@ const getSearchTransactions = async (req, res, next) => {
 };
 
 const getAllTransactionsById = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetAllTransactionsById = `SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC;`;
     const sqlDataAllTransactionsById = req.params.user_id;
@@ -97,6 +101,7 @@ const getAllTransactionsById = async (req, res, next) => {
 };
 
 const getOngoingTransactionsById = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetOngoingTransactions = `SELECT * FROM transactions WHERE user_id = ${req.params.user_id} AND 
                                          status = 'waiting_payment' OR status = 'waiting_confirmation' 
@@ -116,6 +121,7 @@ const getOngoingTransactionsById = async (req, res, next) => {
 };
 
 const getPastTransactionsById = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetPastTransactions = `SELECT * FROM transactions WHERE user_id = ${req.params.user_id} AND 
                                       status = 'arrived' ORDER BY created_at DESC`;
@@ -133,6 +139,7 @@ const getPastTransactionsById = async (req, res, next) => {
 };
 
 const getTransactionDetails = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetTransactionDetails = `SELECT p.product_id, product_name, td.price, quantity FROM transaction_details td
                                         JOIN products p ON td.product_id = p.product_id 
@@ -151,6 +158,7 @@ const getTransactionDetails = async (req, res, next) => {
 };
 
 const getAllTransactionsByWarehouse = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetAllTransactions = `SELECT * FROM transactions WHERE warehouse_id = ? ORDER BY created_at DESC;`;
     const sqlDataAllTransactions = req.params.warehouse_id;
@@ -171,6 +179,7 @@ const getAllTransactionsByWarehouse = async (req, res, next) => {
 };
 
 const getOngoingTransactionsByWarehouse = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetOngoingTransactions = `SELECT * FROM transactions WHERE warehouse_id = ${req.params.warehouse_id} AND 
                                          status = 'waiting_payment' OR status = 'waiting_confirmation' 
@@ -190,6 +199,7 @@ const getOngoingTransactionsByWarehouse = async (req, res, next) => {
 };
 
 const getPastTransactionsByWarehouse = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetPastTransactions = `SELECT * FROM transactions WHERE warehouse_id = ${req.params.warehouse_id} AND 
                                       status = 'arrived' ORDER BY created_at DESC;`;
@@ -207,6 +217,7 @@ const getPastTransactionsByWarehouse = async (req, res, next) => {
 };
 
 const getSearchTransactionsWh = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetSearchTransaction = `SELECT * FROM transactions 
                                        WHERE recipient LIKE '%${req.query.recipient_name}%' 

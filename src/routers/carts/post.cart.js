@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const postNewCart = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostNewCart = `INSERT INTO carts (user_id) VALUES (?);`;
     const dataPostNewCart = [req.params.user_id];
@@ -20,6 +20,7 @@ const postNewCart = async (req, res, next) => {
 };
 
 const postNewCartDetails = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostNewCartDetails = `INSERT INTO cart_details SET ?;`;
     const dataPostNewCartDetails = [req.body];

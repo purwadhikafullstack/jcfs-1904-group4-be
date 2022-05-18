@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const putDefaultAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPutDefaultAddress = `UPDATE address_users SET is_default = 0 WHERE address_id = ${req.params.address_id} ;`;
 
@@ -17,6 +17,7 @@ const putDefaultAddress = async (req, res, next) => {
 };
 
 const putUserAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPutUserAddress =
       "UPDATE address_users SET ? WHERE address_id = ? ;";

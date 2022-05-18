@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const postUserAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPostUserAddress = "INSERT INTO address_users SET ?;";
     const dataPostUserAddress = [req.body];

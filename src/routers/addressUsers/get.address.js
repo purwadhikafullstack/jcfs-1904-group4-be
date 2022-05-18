@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const getUserAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetUserAddress = "SELECT * FROM address_users WHERE user_id = ?";
     const dataGetUserAddress = req.params.user_id;
@@ -23,6 +23,7 @@ const getUserAddress = async (req, res, next) => {
 };
 
 const getDefaultAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetDefaultAddress =
       "SELECT * FROM address_users WHERE user_id = ? AND is_default = 1";
@@ -44,6 +45,7 @@ const getDefaultAddress = async (req, res, next) => {
 };
 
 const getChosenAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetChosenAddress = `SELECT * FROM address_users WHERE address_id = ${req.params.address_id}`;
 
@@ -60,6 +62,7 @@ const getChosenAddress = async (req, res, next) => {
 };
 
 const getTransactionAddress = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlGetTransactionAddress = `SELECT a.address_id, province, city, village, district, postal_code, detail_address FROM address_users a
                                       JOIN transactions t ON a.address_id = t.address_id

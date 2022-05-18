@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const pool = require("../../config/database");
-const connection = await pool.promise().getConnection();
 
 const putCartQuantity = async (req, res, next) => {
+  const connection = await pool.promise().getConnection();
   try {
     const sqlPutCartQuantity = `UPDATE cart_details SET quantity = ? WHERE cart_id = ? AND product_id = ?`;
     const dataPutCartQuantity = [
